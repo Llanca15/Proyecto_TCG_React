@@ -1,122 +1,77 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import React, { useState, useEffect } from 'react';
 
-function App() {
-  const [count, setCount] = useState(0)
+
+export default function Inicio() {
+  const [usuarioActivo, setUsuarioActivo] = useState('');
+
+  useEffect(() => {
+    // Lee la sesión almacenada en localStorage al cargar el componente
+    const usuarioGuardado = localStorage.getItem('usuario_activo');
+    if (usuarioGuardado) {
+      setUsuarioActivo(usuarioGuardado);
+    }
+  }, []);
+
+  const cerrarSesion = () => {
+    localStorage.removeItem('usuario_activo');
+    setUsuarioActivo(''); // Actualiza el estado para reflejar el cambio en pantalla de inmediato
+  };
 
   return (
     <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
+      <header>
+        <img
+          src="image/Pokémon_Trading_Card_Game_logo_logo.svg.webp"
+          width="400"
+          height="200"
+          alt="Logo de pokemon"
+          style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
+        />
+        <nav className="menu">
+          <a href="pokemon_tcg.html"> INICIO </a>
+          <a href="productos_tcg.html"> PRODUCTOS </a>
+          <a href="contacto_tcg.html"> CONTACTO </a>
+
+          {/* Renderizado condicional según el estado de la sesión */}
+          {usuarioActivo ? (
+            <span id="user-info" style={{ color: 'white', marginLeft: '15px' }}>
+              👤 <strong>{usuarioActivo}</strong>
+              <button
+                onClick={cerrarSesion}
+                className="btn btn-sm btn-outline-light ms-2"
+                style={{ fontSize: '12px', padding: '2px 6px' }}
+              >
+                Salir
+              </button>
+            </span>
+          ) : (
+            <a href="Login_tcg.html"> INICIAR SESIÓN </a>
+          )}
+        </nav>
+      </header>
+
+      <main>
+        <section id="aboutUs">
+          <h2>Quienes Somos ?</h2>
           <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
+            POKEMON TCG es una tienda especializada nacida por y para la comunidad de entrenadores que disfrutan del
+            juego físico.
+            Nos dedicamos a ofrecer los últimos lanzamientos de cartas, desde sobres individuales y cajas de sobres
+            (Booster Boxes)
+            hasta colecciones especiales, fundas protectoras y carpetas de alta calidad para mantener tus joyas a
+            salvo. Además de
           </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+        </section>
+      </main>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+      <footer className="text-white text-center py-4 mt-5">
+        <div className="container">
+          <h5>Pobres TCG Store</h5>
+          <p>Tu tienda de cartas coleccionables favorita.</p>
+          <hr className="border-light" />
+          <p className="mb-0">&copy; 2026 Pobres TCG Store. Todos los derechos reservados.</p>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+      </footer>
     </>
-  )
+  );
 }
-
-export default App
