@@ -1,20 +1,22 @@
-import React from 'react';
 import Encabezado from './components/Encabezado';
 import Portada from './components/Portada';
 import PiePagina from './components/PiePagina';
+import Productos from './pages/Productos';
 
-export default function Inicio() {
+import { Routes, Route } from 'react-router';
+
+export default function App() {
   return (
     <>
-      {/* Encabezado */}
       <Encabezado />
 
-      {/* Contenido principal con la Portada */}
       <main>
-        <Portada />
+        <Routes>
+          <Route path="/" element={<Portada />} />
+          <Route path="/productos" element={<Productos />} />
+        </Routes>
       </main>
 
-      {/* Pie de página */}
       <PiePagina />
     </>
   );

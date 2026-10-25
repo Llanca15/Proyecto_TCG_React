@@ -1,5 +1,5 @@
 import {Row,Col,Alert} from 'react-bootstrap'
-import TarjetaProducto from './TarjetaProducto.jsx'
+
 
 
 function Catalogo({productos,onAgregarCarrito}){

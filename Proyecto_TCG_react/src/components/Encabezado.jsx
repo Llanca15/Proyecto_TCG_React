@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router'; // 1. Importar Link
 
 export default function Encabezado() {
   const [usuarioActivo, setUsuarioActivo] = useState('');
@@ -25,11 +26,11 @@ export default function Encabezado() {
         style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
       />
       <nav className="menu">
-        <a href="pokemon_tcg.html">INICIO</a>
-        <a href="./">PRODUCTOS</a>
-        <a href="contacto_tcg.html">CONTACTO</a>
+        {/* 2. Reemplazar <a> por <Link to="..."> */}
+        <Link to="/">INICIO</Link>
+        <Link to="/productos">PRODUCTOS</Link>
+        <Link to="/contacto">CONTACTO</Link>
 
-        {/* Renderizado condicional corregido */}
         {usuarioActivo ? (
           <div id="user-info" style={{ display: 'inline-block', color: 'white', marginLeft: '15px' }}>
             <span>👤 <strong>{usuarioActivo}</strong></span>
@@ -42,7 +43,7 @@ export default function Encabezado() {
             </button>
           </div>
         ) : (
-          <a href="Login_tcg.html">INICIAR SESIÓN</a>
+          <Link to="/login">INICIAR SESIÓN</Link>
         )}
       </nav>
     </header>
