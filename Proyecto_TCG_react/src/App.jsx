@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-
 export default function Inicio() {
   const [usuarioActivo, setUsuarioActivo] = useState('');
 
@@ -21,7 +20,7 @@ export default function Inicio() {
     <>
       <header>
         <img
-          src="image/Pokémon_Trading_Card_Game_logo_logo.svg.webp"
+          src="/image/Pokémon_Trading_Card_Game_logo_logo.svg.webp"
           width="400"
           height="200"
           alt="Logo de pokemon"
@@ -29,7 +28,7 @@ export default function Inicio() {
         />
         <nav className="menu">
           <a href="pokemon_tcg.html"> INICIO </a>
-          <a href="productos_tcg.html"> PRODUCTOS </a>
+          <a href="./"> PRODUCTOS </a>
           <a href="contacto_tcg.html"> CONTACTO </a>
 
           {/* Renderizado condicional según el estado de la sesión */}
@@ -64,7 +63,7 @@ export default function Inicio() {
         </section>
       </main>
 
-      <footer className="text-white text-center py-4 mt-5">
+      <footer className="text-white text-center py-4 mt-5 bg-dark">
         <div className="container">
           <h5>Pobres TCG Store</h5>
           <p>Tu tienda de cartas coleccionables favorita.</p>
