@@ -4,9 +4,11 @@ import TarjetaProducto from './TarjetaProducto.jsx'
 
 function Catalogo({ productos, onAgregar }) {
   if (productos.length === 0) {
-    return <Alert variant="warning">
-      No hay productos para mostrar.
-    </Alert>
+    return (
+      <Alert variant="warning">
+        No se encontraron cartas con esos filtros.
+      </Alert>
+    )
   }
 
   return (
