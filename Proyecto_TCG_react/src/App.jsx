@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router';
 
 import productos from './data/productos.js';
@@ -9,9 +9,26 @@ import PiePagina from './components/PiePagina';
 import Productos from './pages/Productos';
 import Carrito from './components/Carrito';
 
+const CLAVE_CARRITO = 'carrito-loquieres';
+
+// Recuperar el carrito guardado en el navegador.
+function cargarCarritoGuardado() {
+  try {
+    const guardado = localStorage.getItem(CLAVE_CARRITO);
+    return guardado ? JSON.parse(guardado) : [];
+  } catch {
+    return [];
+  }
+}
+
 export default function App() {
-  const [carrito, setCarrito] = useState([]);
+  const [carrito, setCarrito] = useState(cargarCarritoGuardado);
   const [mostrarCarrito, setMostrarCarrito] = useState(false);
+
+  // Guardar el carrito cada vez que cambie.
+  useEffect(() => {
+    localStorage.setItem(CLAVE_CARRITO, JSON.stringify(carrito));
+  }, [carrito]);
 
   const cantidadTotal = carrito.reduce(
     (suma, item) => suma + item.cantidad,
@@ -20,7 +37,9 @@ export default function App() {
 
   function agregarAlCarrito(producto) {
     setCarrito((actual) => {
-      const existe = actual.find((item) => item.id === producto.id);
+      const existe = actual.find(
+        (item) => item.id === producto.id
+      );
 
       if (existe) {
         return actual.map((item) =>
@@ -42,7 +61,6 @@ export default function App() {
 
   return (
     <>
-      {/* ÚNICO encabezado de la aplicación */}
       <Encabezado
         cantidad={cantidadTotal}
         onVerCarrito={() => setMostrarCarrito(true)}
@@ -64,7 +82,6 @@ export default function App() {
         </Routes>
       </main>
 
-      {/* ÚNICO carrito de la aplicación */}
       <Carrito
         mostrar={mostrarCarrito}
         onCerrar={() => setMostrarCarrito(false)}
