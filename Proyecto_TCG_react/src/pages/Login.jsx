@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 
-export default function Login() {
+export default function Login({ setIsAuthenticated }) { // <-- 1. Recibimos la prop aquí
   const [formData, setFormData] = useState({
     nombre: '',
     correo: '',
@@ -28,13 +28,17 @@ export default function Login() {
     const usuarioActivo = nombre || correo;
     localStorage.setItem('usuario_activo', usuarioActivo);
 
-    // Dispara un evento personalizado para actualizar el encabezado al instante
     window.dispatchEvent(new Event('storage'));
 
-    // Redirección interna con React Router
+    // 2. Verificamos las credenciales
     if (correo === 'admin@tcg.cl' && contrasena === 'tcgchampion') {
-      navigate('/admin'); // O la ruta de administración que tengas
+      // Si es admin, actualizamos el estado de autenticación a true
+      if (setIsAuthenticated) {
+        setIsAuthenticated(true); 
+      }
+      navigate('/admin');
     } else {
+      // Si es un usuario normal, va a la portada
       navigate('/');
     }
   };

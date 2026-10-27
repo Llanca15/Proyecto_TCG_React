@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route } from 'react-router';
+import { Routes, Route } from 'react-router'; // o 'react-router-dom'
 
 import productos from './data/productos.js';
 import Encabezado from './components/Encabezado';
@@ -9,7 +9,8 @@ import Productos from './pages/Productos';
 import Contacto from './pages/Contacto';
 import Login from './pages/Login';
 import Carrito from './components/Carrito';
-import AdminPanel from './pages/Admin'; // <-- Tu componente AdminPanel ya está importado aquí
+import AdminPanel from './pages/Admin'; 
+import ProtectedRoute from './components/RutaAdmin'; // Importamos la ruta protegida
 
 const CLAVE_CARRITO = 'carrito-loquieres';
 
@@ -25,6 +26,9 @@ function cargarCarritoGuardado() {
 export default function App() {
   const [carrito, setCarrito] = useState(cargarCarritoGuardado);
   const [mostrarCarrito, setMostrarCarrito] = useState(false);
+  
+  // ¡AQUÍ ESTÁ LA LÍNEA QUE FALTABA!
+  const [isAuthenticated, setIsAuthenticated] = useState(false); 
 
   useEffect(() => {
     localStorage.setItem(CLAVE_CARRITO, JSON.stringify(carrito));
@@ -71,11 +75,17 @@ export default function App() {
           />
           <Route path="/contacto" element={<Contacto />} />
           
-          {/* Ruta del login */}
-          <Route path="/login" element={<Login />} />
+          {/* Ahora esta línea (la 78) ya no dará error porque setIsAuthenticated ya existe arriba */}
+          <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
 
-          {/* Ruta del Panel de Administración */}
-          <Route path="/admin" element={<AdminPanel />} />
+          <Route 
+            path="/admin" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <AdminPanel />
+              </ProtectedRoute>
+            } 
+          />
         </Routes>
       </main>
 
