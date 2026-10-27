@@ -1,23 +1,31 @@
 
-import { Card, Button, Badge } from 'react-bootstrap'
-import { formatearPrecio } from '../utils/Formato.jsx'
+import { Card, Button } from 'react-bootstrap';
+import { formatearPrecio } from '../utils/Formato.jsx';
 
 function TarjetaProducto({ producto, onAgregar }) {
-  const { nombre, categoria, precio, stock, icono } = producto
-  const agotado = stock === 0
+  const { nombre, descripcion, precio, stock, imagen } = producto;
+  const agotado = stock === 0;
 
   return (
-    <Card className="h-100 shadow-sm">
-      <div className="icono-producto">{icono}</div>
+    <Card className="tarjeta-producto h-100">
+      <div className="contenedor-imagen-producto">
+        <Card.Img
+          src={imagen}
+          alt={nombre}
+          className="imagen-producto"
+        />
+      </div>
 
-      <Card.Body className="d-flex flex-column">
-        <Badge bg="secondary" className="align-self-start mb-2">
-          {categoria}
-        </Badge>
+      <Card.Body className="cuerpo-producto d-flex flex-column">
+        <Card.Title className="titulo-producto">
+          {nombre}
+        </Card.Title>
 
-        <Card.Title>{nombre}</Card.Title>
+        <Card.Text className="descripcion-producto">
+          {descripcion}
+        </Card.Text>
 
-        <Card.Text className="fs-5 fw-semibold">
+        <Card.Text className="precio-producto">
           {formatearPrecio(precio)}
         </Card.Text>
 
@@ -26,8 +34,7 @@ function TarjetaProducto({ producto, onAgregar }) {
         </Card.Text>
 
         <Button
-          className="mt-auto"
-          variant="primary"
+          className="mt-auto boton-producto"
           disabled={agotado}
           onClick={() => onAgregar(producto)}
         >
@@ -35,7 +42,7 @@ function TarjetaProducto({ producto, onAgregar }) {
         </Button>
       </Card.Body>
     </Card>
-  )
+  );
 }
 
-export default TarjetaProducto
+export default TarjetaProducto;

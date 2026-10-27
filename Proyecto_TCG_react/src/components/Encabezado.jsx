@@ -27,13 +27,15 @@ export default function Encabezado({ cantidad = 0, onVerCarrito }) {
       <Navbar expand="md" className="p-3">
         <Container className="header-container">
           {/* Logo a la izquierda */}
-          <Navbar.Brand as={Link} to="/" className="m-0 p-0">
-            <img
-              src="/image/Pokémon_Trading_Card_Game_logo_logo.svg.webp"
-              alt="Logo de Pokémon"
-              className="logo-header"
-            />
-          </Navbar.Brand>
+          
+        <Navbar.Brand as={Link} to="/" className="m-0 p-0">
+          <img
+            src="/images/logos/Pokémon_Trading_Card_Game_logo_logo.svg.webp"
+            alt="Logo de Pokémon"
+            className="logo-header"
+          />
+        </Navbar.Brand>
+
 
           <Navbar.Toggle
             aria-controls="menu-principal"

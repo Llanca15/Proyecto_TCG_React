@@ -1,6 +1,6 @@
 
-import { Row, Col, Alert } from 'react-bootstrap'
-import TarjetaProducto from './TarjetaProducto.jsx'
+import { Row, Col, Alert } from 'react-bootstrap';
+import TarjetaProducto from './TarjetaProducto.jsx';
 
 function Catalogo({ productos, onAgregar }) {
   if (productos.length === 0) {
@@ -8,11 +8,11 @@ function Catalogo({ productos, onAgregar }) {
       <Alert variant="warning">
         No se encontraron cartas con esos filtros.
       </Alert>
-    )
+    );
   }
 
   return (
-    <Row xs={1} sm={2} lg={3} className="g-4">
+    <Row xs={1} sm={2} lg={3} className="g-4 catalogo-productos">
       {productos.map((producto) => (
         <Col key={producto.id}>
           <TarjetaProducto
@@ -22,7 +22,7 @@ function Catalogo({ productos, onAgregar }) {
         </Col>
       ))}
     </Row>
-  )
+  );
 }
 
-export default Catalogo
+export default Catalogo;
