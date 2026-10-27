@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router';
 
@@ -7,6 +6,7 @@ import Encabezado from './components/Encabezado';
 import Portada from './components/Portada';
 import PiePagina from './components/PiePagina';
 import Productos from './pages/Productos';
+import Contacto from './pages/Contacto';
 import Carrito from './components/Carrito';
 
 const CLAVE_CARRITO = 'carrito-loquieres';
@@ -78,6 +78,12 @@ export default function App() {
                 onAgregar={agregarAlCarrito}
               />
             }
+          />
+
+          {/* Página de contacto */}
+          <Route
+            path="/contacto"
+            element={<Contacto />}
           />
         </Routes>
       </main>
