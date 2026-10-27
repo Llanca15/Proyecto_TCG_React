@@ -7,11 +7,11 @@ import Portada from './components/Portada';
 import PiePagina from './components/PiePagina';
 import Productos from './pages/Productos';
 import Contacto from './pages/Contacto';
+import Login from './pages/Login'; // <--- 1. Importa la página de Login
 import Carrito from './components/Carrito';
 
 const CLAVE_CARRITO = 'carrito-loquieres';
 
-// Recuperar el carrito guardado en el navegador.
 function cargarCarritoGuardado() {
   try {
     const guardado = localStorage.getItem(CLAVE_CARRITO);
@@ -25,7 +25,6 @@ export default function App() {
   const [carrito, setCarrito] = useState(cargarCarritoGuardado);
   const [mostrarCarrito, setMostrarCarrito] = useState(false);
 
-  // Guardar el carrito cada vez que cambie.
   useEffect(() => {
     localStorage.setItem(CLAVE_CARRITO, JSON.stringify(carrito));
   }, [carrito]);
@@ -37,10 +36,7 @@ export default function App() {
 
   function agregarAlCarrito(producto) {
     setCarrito((actual) => {
-      const existe = actual.find(
-        (item) => item.id === producto.id
-      );
-
+      const existe = actual.find((item) => item.id === producto.id);
       if (existe) {
         return actual.map((item) =>
           item.id === producto.id
@@ -48,15 +44,12 @@ export default function App() {
             : item
         );
       }
-
       return [...actual, { ...producto, cantidad: 1 }];
     });
   }
 
   function quitarDelCarrito(id) {
-    setCarrito((actual) =>
-      actual.filter((item) => item.id !== id)
-    );
+    setCarrito((actual) => actual.filter((item) => item.id !== id));
   }
 
   return (
@@ -69,22 +62,16 @@ export default function App() {
       <main>
         <Routes>
           <Route path="/" element={<Portada />} />
-
           <Route
             path="/productos"
             element={
-              <Productos
-                productos={productos}
-                onAgregar={agregarAlCarrito}
-              />
+              <Productos productos={productos} onAgregar={agregarAlCarrito} />
             }
           />
-
-          {/* Página de contacto */}
-          <Route
-            path="/contacto"
-            element={<Contacto />}
-          />
+          <Route path="/contacto" element={<Contacto />} />
+          
+          {/* 2. Añade la ruta del login */}
+          <Route path="/login" element={<Login />} />
         </Routes>
       </main>
 

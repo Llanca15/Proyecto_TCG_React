@@ -7,10 +7,14 @@ export default function Encabezado({ cantidad = 0, onVerCarrito }) {
   const [usuarioActivo, setUsuarioActivo] = useState('');
 
   useEffect(() => {
-    const usuarioGuardado = localStorage.getItem('usuario_activo');
-    if (usuarioGuardado) {
-      setUsuarioActivo(usuarioGuardado);
-    }
+    const verificarUsuario = () => {
+      const usuarioGuardado = localStorage.getItem('usuario_activo');
+      setUsuarioActivo(usuarioGuardado || '');
+    };
+
+    verificarUsuario();
+    window.addEventListener('storage', verificarUsuario);
+    return () => window.removeEventListener('storage', verificarUsuario);
   }, []);
 
   const cerrarSesion = () => {
