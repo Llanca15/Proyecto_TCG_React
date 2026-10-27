@@ -7,8 +7,9 @@ import Portada from './components/Portada';
 import PiePagina from './components/PiePagina';
 import Productos from './pages/Productos';
 import Contacto from './pages/Contacto';
-import Login from './pages/Login'; // <--- 1. Importa la página de Login
+import Login from './pages/Login';
 import Carrito from './components/Carrito';
+import AdminPanel from './pages/Admin'; // <-- Tu componente AdminPanel ya está importado aquí
 
 const CLAVE_CARRITO = 'carrito-loquieres';
 
@@ -70,8 +71,11 @@ export default function App() {
           />
           <Route path="/contacto" element={<Contacto />} />
           
-          {/* 2. Añade la ruta del login */}
+          {/* Ruta del login */}
           <Route path="/login" element={<Login />} />
+
+          {/* Ruta del Panel de Administración */}
+          <Route path="/admin" element={<AdminPanel />} />
         </Routes>
       </main>
 
