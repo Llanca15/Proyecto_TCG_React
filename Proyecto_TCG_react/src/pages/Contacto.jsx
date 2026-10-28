@@ -102,8 +102,8 @@ export default function Contacto() {
         </div>
 
         <nav className="enlace-liga">
-          <Link to="/liga-pokemon">
-            Ir a la Liga Pokémon
+          <Link to="/liga-pokemon" className="menu-link">
+          LIGA
           </Link>
         </nav>
       </form>

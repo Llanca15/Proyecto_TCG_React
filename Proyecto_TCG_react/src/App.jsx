@@ -7,6 +7,7 @@ import Portada from './components/Portada';
 import PiePagina from './components/PiePagina';
 import Productos from './pages/Productos';
 import Contacto from './pages/Contacto';
+import LigaPokemon from './pages/Liga_pokemon';
 import Login from './pages/Login';
 import Carrito from './components/Carrito';
 import AdminPanel from './pages/Admin'; 
@@ -74,6 +75,8 @@ export default function App() {
             }
           />
           <Route path="/contacto" element={<Contacto />} />
+          
+          <Route path="/liga-pokemon" element={<LigaPokemon />} />
           
           {/* Ahora esta línea (la 78) ya no dará error porque setIsAuthenticated ya existe arriba */}
           <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />

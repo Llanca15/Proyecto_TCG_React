@@ -46,7 +46,7 @@ const productos = [
     precio: 80000,
     stock: 10,
     imagen: '/images/productos_etb/etb_pitch_black.webp'
-  }
+  },
 ];
 
 export default productos;
