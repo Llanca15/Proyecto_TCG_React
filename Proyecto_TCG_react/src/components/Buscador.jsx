@@ -17,7 +17,7 @@ function Buscador({
         <Col md={8}>
           <Form.Control
             type="search"
-            placeholder="Buscar carta por nombre..."
+            placeholder="Buscar coleccion por nombre..."
             value={texto}
             onChange={(evento) =>
               onCambiarTexto(evento.target.value)

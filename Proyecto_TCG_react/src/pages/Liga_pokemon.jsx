@@ -27,15 +27,7 @@ export default function LigaPokemon() {
       >
         <section id="aboutUs">
           <h2 className="titulo-liga">
-            <img
-              src="/images/logos/Logo_Liga_pokemon.webp"
-              alt="Logo de la Liga Pokémon"
-            />
             Liga Pokémon
-            <img
-              src="/images/logos/Logo_Liga_pokemon.webp"
-              alt="Logo de la Liga Pokémon"
-            />
           </h2>
 
           <p>
