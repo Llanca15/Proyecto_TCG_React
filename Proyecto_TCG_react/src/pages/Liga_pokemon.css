@@ -1,0 +1,210 @@
+
+/* ==========================================
+   CONTENEDOR DE INFORMACIÓN DE LA LIGA
+   ========================================== */
+
+.liga-pokemon .liga-info {
+    width: 100%;
+    max-width: 910px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border: 2px solid #b71c1c;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ==========================================
+   TÍTULO DE LA LIGA
+   ========================================== */
+
+.liga-pokemon .titulo-liga {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: #bb2a2a;
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 25px;
+}
+
+.liga-pokemon .titulo-liga img {
+    width: 35px;
+    height: auto;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.liga-pokemon #aboutUs h3 {
+    color: #b71c1c;
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-top: 28px;
+    margin-bottom: 15px;
+}
+
+.liga-pokemon #aboutUs ul {
+    display: inline-block;
+    max-width: 750px;
+    margin: 0 auto 10px;
+    padding-left: 25px;
+    text-align: left;
+}
+
+.liga-pokemon #aboutUs li {
+    line-height: 1.7;
+    margin-bottom: 8px;
+    color: #333333;
+}
+
+/* ==========================================
+   TARJETAS DE ADMINISTRADORES
+   ========================================== */
+
+.liga-pokemon .admins-liga {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 0;
+}
+
+.liga-pokemon .admins-liga article {
+    min-width: 0;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 2px solid #e0e0e0;
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.liga-pokemon .admins-liga article:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    border-color: #ff0505;
+}
+
+/* ==========================================
+   IMÁGENES DE LOS ADMINISTRADORES
+   ========================================== */
+
+.liga-pokemon .admins-liga article > img {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    margin-bottom: 15px;
+    transition: transform 0.3s ease;
+}
+
+.liga-pokemon .admins-liga article:hover > img {
+    transform: scale(1.08);
+}
+
+/* Imagen de Aron */
+
+.liga-pokemon .admins-liga article .imagen-aron {
+    width: 35px;
+    height: auto;
+    object-fit: contain;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+/* ==========================================
+   NOMBRES Y DESCRIPCIONES
+   ========================================== */
+
+.liga-pokemon .admins-liga article h3 {
+    color: #1a252f;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.liga-pokemon .admins-liga article .descripcion-admin {
+    font-size: 0.9rem;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: #795548;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    flex-grow: 1;
+}
+
+.liga-pokemon .admins-liga article h4 {
+    color: #b71c1c;
+    font-size: 1rem;
+    font-weight: 800;
+    margin-top: 10px;
+    margin-bottom: 8px;
+}
+
+.liga-pokemon .admins-liga article p {
+    margin-bottom: 10px;
+}
+
+.liga-pokemon .admins-liga article p strong {
+    color: #333333;
+}
+
+/* ==========================================
+   DISEÑO RESPONSIVO
+   ========================================== */
+
+@media (max-width: 768px) {
+    .liga-pokemon .liga-info {
+        padding: 22px;
+    }
+
+    .liga-pokemon .titulo-liga {
+        font-size: 1.65rem;
+        gap: 6px;
+    }
+
+    .liga-pokemon .titulo-liga img {
+        width: 28px;
+    }
+
+    .liga-pokemon .admins-liga {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 20px;
+        padding-top: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .liga-pokemon .liga-info {
+        padding: 18px;
+    }
+
+    .liga-pokemon .titulo-liga {
+        font-size: 1.35rem;
+        gap: 5px;
+    }
+
+    .liga-pokemon .titulo-liga img {
+        width: 23px;
+    }
+
+    .liga-pokemon #aboutUs h3 {
+        font-size: 1.2rem;
+    }
+
+    .liga-pokemon .admins-liga {
+        grid-template-columns: 1fr;
+        padding: 25px 0;
+    }
+
+    .liga-pokemon .admins-liga article {
+        padding: 18px;
+    }
+}

@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import './Liga_pokemon.css';
 
 export default function LigaPokemon() {
   const navigate = useNavigate();
