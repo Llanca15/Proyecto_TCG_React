@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 
-export default function Login({ setIsAuthenticated }) { // <-- 1. Recibimos la prop aquí
+export default function Login({ setIsAuthenticated }) { 
   const [formData, setFormData] = useState({
     nombre: '',
     correo: '',

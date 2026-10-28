@@ -48,6 +48,7 @@ export default function Encabezado({ cantidad = 0, onVerCarrito }) {
               <Nav.Link as={Link} to="/">INICIO</Nav.Link>
               <Nav.Link as={Link} to="/productos">PRODUCTOS</Nav.Link>
               <Nav.Link as={Link} to="/contacto">CONTACTO</Nav.Link>
+              <Nav.Link as={Link} to="/Admin">ADMIN</Nav.Link>
 
               {usuarioActivo ? (
                 <div className="user-info">

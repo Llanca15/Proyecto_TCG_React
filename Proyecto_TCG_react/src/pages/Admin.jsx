@@ -1,7 +1,5 @@
 import React from 'react';
-// Asegúrate de importar tu archivo CSS si estás en React:
-// import './css/admin.css';
-
+import './Admin.css';
 const AdminPanel = () => {
   return (
     <>
