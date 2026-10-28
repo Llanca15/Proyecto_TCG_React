@@ -33,8 +33,8 @@ export default function Productos({ productos, onAgregar }) {
       id="catalogo"
       style={{ padding: '40px 0', color: 'black' }}
     >
-      <h2 className="mb-3">Catálogo de cartas Pokémon</h2>
-      <p>Busca tus cartas por nombre o categoría.</p>
+      <h2 className="mb-3">Catálogo de productos Pokémon</h2>
+      <p>Busca tus productos por nombre o categoría.</p>
 
       <Buscador
         texto={texto}

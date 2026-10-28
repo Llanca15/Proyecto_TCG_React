@@ -10,7 +10,7 @@ export default function Portada() {
         Nos dedicamos a ofrecer los últimos lanzamientos de cartas, desde sobres individuales y cajas de sobres
         (Booster Boxes)
         hasta colecciones especiales, fundas protectoras y carpetas de alta calidad para mantener tus joyas a
-        salvo. Además de
+        salvo.
       </p>
     </section>
   );
