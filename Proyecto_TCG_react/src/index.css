@@ -124,118 +124,10 @@ footer {
 }
 
 /* ==========================================
-   CATÁLOGO DE PRODUCTOS
-   ========================================== */
-
-.catalogo-productos {
-    margin-top: 10px;
-    margin-bottom: 20px;
-}
-
-/* ==========================================
-   TARJETAS DE PRODUCTOS
-   ========================================== */
-
-.tarjeta-producto {
-    height: 100%;
-    background-color: #ffffff;
-    color: #222222;
-    border: 1px solid #dddddd;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.tarjeta-producto:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.14);
-}
-
-/* ==========================================
-   IMÁGENES DE LAS ETB
-   SE MANTIENE EL TAMAÑO ORIGINAL
-   ========================================== */
-
-.contenedor-imagen-producto {
-    width: 100%;
-    height: 280px;
-    padding: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #ffffff;
-}
-
-.imagen-producto {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-/* ==========================================
-   INFORMACIÓN DEL PRODUCTO
-   ========================================== */
-
-.cuerpo-producto {
-    padding: 16px;
-}
-
-.titulo-producto {
-    font-family: 'Outfit', sans-serif;
-    font-size: 1.15rem;
-    font-weight: 800;
-    color: #222222;
-    margin-bottom: 12px;
-}
-
-.descripcion-producto {
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size: 14px;
-    line-height: 1.6;
-    color: #333333;
-}
-
-.precio-producto {
-    font-family: 'Outfit', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: #b71c1c;
-}
-
-/* ==========================================
-   BOTÓN AGREGAR AL CARRITO
-   ========================================== */
-
-.boton-producto {
-    background-color: #b71c1c;
-    border-color: #b71c1c;
-    border-radius: 20px;
-    padding: 8px 14px;
-    margin-top: 10px;
-    transition: background-color 0.2s ease;
-}
-
-.boton-producto:hover {
-    background-color: #880e4f;
-    border-color: #880e4f;
-}
-
-.boton-producto:disabled {
-    background-color: #999999;
-    border-color: #999999;
-}
-
-/* ==========================================
    TABLETS
    ========================================== */
 
 @media (max-width: 992px) {
-    .contenedor-imagen-producto {
-        height: 250px;
-    }
-
     header .header-container {
         gap: 12px;
     }
@@ -252,14 +144,6 @@ footer {
 @media (max-width: 576px) {
     main {
         padding: 25px 12px;
-    }
-
-    .contenedor-imagen-producto {
-        height: 260px;
-    }
-
-    .cuerpo-producto {
-        padding: 14px;
     }
 
     .logo-header {

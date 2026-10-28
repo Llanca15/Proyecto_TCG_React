@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Container } from 'react-bootstrap'
 import Catalogo from '../components/Catalogo.jsx'
 import Buscador from '../components/Buscador.jsx'
+import './Productos.css'
 
 export default function Productos({ productos, onAgregar }) {
   const [texto, setTexto] = useState('')

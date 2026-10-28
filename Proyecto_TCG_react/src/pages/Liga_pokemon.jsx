@@ -27,12 +27,12 @@ export default function LigaPokemon() {
         <section id="aboutUs">
           <h2 className="titulo-liga">
             <img
-              src="/image/Logo_Liga_pokemon.webp"
+              src="/images/logos/Logo_Liga_pokemon.webp"
               alt="Logo de la Liga Pokémon"
             />
             Liga Pokémon
             <img
-              src="/image/Logo_Liga_pokemon.webp"
+              src="/images/logos/Logo_Liga_pokemon.webp"
               alt="Logo de la Liga Pokémon"
             />
           </h2>
@@ -86,7 +86,7 @@ export default function LigaPokemon() {
       <section id="admins" className="admins-liga">
         <article>
           <img
-            src="/image/xdd/Ogerpon_planta.png"
+            src="/images/liga_pokemon/Ogerpon_planta.png"
             alt="Ogerpon Planta EX"
           />
           <h3>Ogerpon Planta EX</h3>
@@ -102,7 +102,7 @@ export default function LigaPokemon() {
 
         <article>
           <img
-            src="/image/xdd/mega darkrai.png"
+            src="/images/liga_pokemon/mega darkrai.png"
             alt="Mega-Darkrai EX"
           />
           <h3>Mega-Darkrai EX</h3>
@@ -119,7 +119,7 @@ export default function LigaPokemon() {
 
         <article>
           <img
-            src="/image/xdd/carta_random.jpg"
+            src="/images/liga_pokemon/carta_random.jpg"
             alt="Carta misteriosa"
           />
           <h3>??</h3>
@@ -134,7 +134,7 @@ export default function LigaPokemon() {
             <strong>
               <img
                 className="imagen-aron"
-                src="/image/xdd/Aron.png"
+                src="/images/liga_pokemon/Aron.png"
                 alt="Aron"
               />
               Tapia
