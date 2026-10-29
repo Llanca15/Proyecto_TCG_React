@@ -4,6 +4,7 @@ const productos = [
     nombre: 'ETB ACENDED HEROES',
     descripcion: 'Etb de la expansion acended heroes protagonizada por MEGA DRAGONITE EX',
     precio: 80000,
+    descuento: 15, // 15% de descuento
     stock: 10,
     imagen: '/images/productos_etb/etb_acended_heroes.jpg'
   },
@@ -20,6 +21,7 @@ const productos = [
     nombre: 'ETB PERFECT ORDER',
     descripcion: 'Etb de la expansion chaos rising protagonizada por MEGA ZYGARDE EX',
     precio: 90000,
+    descuento: 20, // 20% de descuento
     stock: 10,
     imagen: '/images/productos_etb/etb_perfect_order.jpg'
   },
@@ -36,6 +38,7 @@ const productos = [
     nombre: 'ETB PHANTHASMAL FLAMES',
     descripcion: 'Etb de la expansion phanthasmal flames protagonizada por MEGA CHARIZARD X EX',
     precio: 75000,
+    descuento: 35, // 10% de descuento
     stock: 10,
     imagen: '/images/productos_etb/etb_phanthasmal_flames.webp'
   },
@@ -57,4 +60,3 @@ export function formatearPrecio(valor) {
     currency: 'CLP',
   })
 }
-

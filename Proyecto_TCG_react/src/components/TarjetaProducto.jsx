@@ -1,13 +1,28 @@
-
-import { Card, Button } from 'react-bootstrap';
+import { Card, Button, Badge } from 'react-bootstrap';
 import { formatearPrecio } from '../utils/Formato.jsx';
 
 function TarjetaProducto({ producto, onAgregar }) {
-  const { nombre, descripcion, precio, stock, imagen } = producto;
+  const { nombre, descripcion, precio, descuento, stock, imagen } = producto;
   const agotado = stock === 0;
 
+  // Calcular precio con descuento si aplica
+  const tieneDescuento = descuento && descuento > 0;
+  const precioFinal = tieneDescuento ? precio * (1 - descuento / 100) : precio;
+
+  // Al agregar al carrito, podemos mandar el precio ya con descuento aplicado
+  const productoParaAgregar = {
+    ...producto,
+    precio: precioFinal
+  };
+
   return (
-    <Card className="tarjeta-producto h-100">
+    <Card className="tarjeta-producto h-100 position-relative">
+      {tieneDescuento && (
+        <Badge bg="danger" className="position-absolute top-0 end-0 m-2 p-2">
+          -{descuento}%
+        </Badge>
+      )}
+
       <div className="contenedor-imagen-producto">
         <Card.Img
           src={imagen}
@@ -25,9 +40,22 @@ function TarjetaProducto({ producto, onAgregar }) {
           {descripcion}
         </Card.Text>
 
-        <Card.Text className="precio-producto">
-          {formatearPrecio(precio)}
-        </Card.Text>
+        <div className="mb-2">
+          {tieneDescuento ? (
+            <div>
+              <span className="text-muted text-decoration-line-through me-2">
+                {formatearPrecio(precio)}
+              </span>
+              <span className="precio-producto fw-bold text-danger">
+                {formatearPrecio(precioFinal)}
+              </span>
+            </div>
+          ) : (
+            <Card.Text className="precio-producto">
+              {formatearPrecio(precio)}
+            </Card.Text>
+          )}
+        </div>
 
         <Card.Text className={agotado ? 'text-danger' : 'text-success'}>
           {agotado ? 'Sin stock' : `Quedan ${stock} unidades`}
@@ -36,7 +64,7 @@ function TarjetaProducto({ producto, onAgregar }) {
         <Button
           className="mt-auto boton-producto"
           disabled={agotado}
-          onClick={() => onAgregar(producto)}
+          onClick={() => onAgregar(productoParaAgregar)}
         >
           Agregar al carrito
         </Button>
