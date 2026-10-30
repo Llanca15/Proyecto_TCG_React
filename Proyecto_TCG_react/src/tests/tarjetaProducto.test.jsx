@@ -31,6 +31,7 @@ describe('TarjetaProducto Component', () => {
     // Verifica que aparezca el precio formateado en CLP
     expect(screen.getByText('$80.000')).toBeInTheDocument();
     expect(screen.queryByText(/-[0-9]+%/)).not.toBeInTheDocument();
+    expect(screen.queryByText('0')).not.toBeInTheDocument();
   });
 
   it('calcula y muestra correctamente el descuento y precio final', () => {
@@ -61,6 +62,19 @@ describe('TarjetaProducto Component', () => {
 
     const boton = screen.getByRole('button', { name: /Agregar al carrito/i });
     expect(boton).toBeDisabled();
+  });
+
+  it('trata el stock guardado como texto "0" como agotado', () => {
+    const productoAgotado = {
+      ...productoBase,
+      stock: '0',
+    };
+
+    render(<TarjetaProducto producto={productoAgotado} onAgregar={() => {}} />);
+
+    expect(screen.getByText('Sin stock')).toBeInTheDocument();
+    expect(screen.queryByText('Quedan 0 unidades')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Agregar al carrito/i })).toBeDisabled();
   });
 
   it('llama a la función onAgregar con el producto y el precio con descuento aplicado al hacer clic', async () => {

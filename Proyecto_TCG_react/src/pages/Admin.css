@@ -28,3 +28,15 @@
     display: flex;
     gap: 8px;
 }
+
+.admin-inventario tbody tr[draggable="true"] {
+    cursor: grab;
+}
+
+.admin-inventario tbody tr[draggable="true"]:active {
+    cursor: grabbing;
+}
+
+.admin-inventario tbody tr.producto-arrastrado {
+    opacity: 0.45;
+}

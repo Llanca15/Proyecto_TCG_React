@@ -18,10 +18,13 @@ const AdminPanel = ({
   onAgregarProducto,
   onActualizarProducto,
   onEliminarProducto,
+  onReordenarProductos,
 }) => {
   const [formulario, setFormulario] = useState(formularioVacio);
   const [productoEditando, setProductoEditando] = useState(null);
   const [mensaje, setMensaje] = useState('');
+  const [mensajeOrden, setMensajeOrden] = useState('');
+  const [productoArrastrado, setProductoArrastrado] = useState(null);
 
   function cambiarCampo(event) {
     const { name, value } = event.target;
@@ -78,6 +81,28 @@ const AdminPanel = ({
     onEliminarProducto(producto.id);
     if (productoEditando === producto.id) cancelarEdicion();
     setMensaje(`Se eliminó "${producto.nombre}".`);
+  }
+
+  function soltarProducto(event, productoDestino) {
+    event.preventDefault();
+    if (productoArrastrado === null || productoArrastrado === productoDestino.id) {
+      return;
+    }
+
+    const indiceOrigen = productos.findIndex(
+      (producto) => producto.id === productoArrastrado
+    );
+    const indiceDestino = productos.findIndex(
+      (producto) => producto.id === productoDestino.id
+    );
+    if (indiceOrigen === -1 || indiceDestino === -1) return;
+
+    const productosReordenados = [...productos];
+    const [productoMovido] = productosReordenados.splice(indiceOrigen, 1);
+    productosReordenados.splice(indiceDestino, 0, productoMovido);
+    onReordenarProductos(productosReordenados);
+    setMensajeOrden(`"${productoMovido.nombre}" ahora está en la posición ${indiceDestino + 1}.`);
+    setProductoArrastrado(null);
   }
 
   return (
@@ -171,6 +196,8 @@ const AdminPanel = ({
 
       <section className="admin-inventario">
         <h2>Inventario ({productos.length})</h2>
+        <p>Arrastra una fila para cambiar el orden de los productos en la tienda.</p>
+        {mensajeOrden && <p className="text-success" role="status">{mensajeOrden}</p>}
         {productos.length === 0 ? (
           <Alert variant="info">No hay productos en el inventario.</Alert>
         ) : (
@@ -186,7 +213,16 @@ const AdminPanel = ({
             </thead>
             <tbody>
               {productos.map((producto) => (
-                <tr key={producto.id}>
+                <tr
+                  key={producto.id}
+                  draggable
+                  onDragStart={() => setProductoArrastrado(producto.id)}
+                  onDragOver={(event) => event.preventDefault()}
+                  onDrop={(event) => soltarProducto(event, producto)}
+                  onDragEnd={() => setProductoArrastrado(null)}
+                  className={productoArrastrado === producto.id ? 'producto-arrastrado' : ''}
+                  aria-label={`Producto reordenable: ${producto.nombre}`}
+                >
                   <td>{producto.nombre}</td>
                   <td>{producto.categoria}</td>
                   <td>{formatearPrecio(producto.precio)}</td>

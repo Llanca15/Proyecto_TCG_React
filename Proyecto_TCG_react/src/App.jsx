@@ -105,6 +105,10 @@ export default function App() {
     setInventario((actual) => actual.filter((producto) => producto.id !== id));
   }
 
+  function reordenarProductos(productosReordenados) {
+    setInventario(productosReordenados);
+  }
+
   return (
     <>
       <Encabezado
@@ -138,6 +142,7 @@ export default function App() {
                   onAgregarProducto={agregarProducto}
                   onActualizarProducto={actualizarProducto}
                   onEliminarProducto={eliminarProducto}
+                  onReordenarProductos={reordenarProductos}
                 />
               </ProtectedRoute>
             } 

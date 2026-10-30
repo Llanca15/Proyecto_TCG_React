@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import AdminPanel from '../pages/Admin';
 
@@ -20,6 +20,7 @@ function renderAdmin(overrides = {}) {
     onAgregarProducto: vi.fn(),
     onActualizarProducto: vi.fn(),
     onEliminarProducto: vi.fn(),
+    onReordenarProductos: vi.fn(),
     ...overrides,
   };
 
@@ -74,5 +75,25 @@ describe('Panel de administración', () => {
     await user.click(screen.getByRole('button', { name: 'Eliminar Sobre de prueba' }));
 
     expect(props.onEliminarProducto).toHaveBeenCalledWith(producto.id);
+  });
+
+  it('reordena productos al arrastrar una fila sobre otra', () => {
+    const segundoProducto = { ...producto, id: 2, nombre: 'Otro sobre' };
+    const { props } = renderAdmin({ productos: [producto, segundoProducto] });
+    const filaOrigen = screen.getByRole('row', {
+      name: /Producto reordenable: Sobre de prueba/,
+    });
+    const filaDestino = screen.getByRole('row', {
+      name: /Producto reordenable: Otro sobre/,
+    });
+
+    fireEvent.dragStart(filaOrigen);
+    fireEvent.dragOver(filaDestino);
+    fireEvent.drop(filaDestino);
+
+    expect(props.onReordenarProductos).toHaveBeenCalledWith([
+      segundoProducto,
+      producto,
+    ]);
   });
 });

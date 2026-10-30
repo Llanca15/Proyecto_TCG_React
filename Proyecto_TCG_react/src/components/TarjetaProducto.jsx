@@ -3,10 +3,11 @@ import { formatearPrecio } from '../utils/Formato.jsx';
 
 function TarjetaProducto({ producto, onAgregar }) {
   const { nombre, descripcion, precio, descuento, stock, imagen } = producto;
-  const agotado = stock === 0;
+  const stockDisponible = Number(stock);
+  const agotado = !Number.isFinite(stockDisponible) || stockDisponible <= 0;
 
   // Calcular precio con descuento si aplica
-  const tieneDescuento = descuento && descuento > 0;
+  const tieneDescuento = Number(descuento) > 0;
   const precioFinal = tieneDescuento ? precio * (1 - descuento / 100) : precio;
 
   // Al agregar al carrito, podemos mandar el precio ya con descuento aplicado
@@ -58,7 +59,7 @@ function TarjetaProducto({ producto, onAgregar }) {
         </div>
 
         <Card.Text className={agotado ? 'text-danger' : 'text-success'}>
-          {agotado ? 'Sin stock' : `Quedan ${stock} unidades`}
+          {agotado ? 'Sin stock' : `Quedan ${stockDisponible} unidades`}
         </Card.Text>
 
         <Button
