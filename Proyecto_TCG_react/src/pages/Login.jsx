@@ -28,19 +28,21 @@ export default function Login({ setIsAuthenticated }) {
     const usuarioActivo = nombre || correo;
     localStorage.setItem('usuario_activo', usuarioActivo);
 
-    window.dispatchEvent(new Event('storage'));
-
-    // 2. Verificamos las credenciales
     if (correo === 'admin@tcg.cl' && contrasena === 'tcgchampion') {
-      // Si es admin, actualizamos el estado de autenticación a true
+      localStorage.setItem('usuario_rol', 'admin');
       if (setIsAuthenticated) {
-        setIsAuthenticated(true); 
+        setIsAuthenticated(true);
       }
       navigate('/admin');
     } else {
-      // Si es un usuario normal, va a la portada
+      localStorage.removeItem('usuario_rol');
+      if (setIsAuthenticated) {
+        setIsAuthenticated(false);
+      }
       navigate('/');
     }
+
+    window.dispatchEvent(new Event('storage'));
   };
 
   return (

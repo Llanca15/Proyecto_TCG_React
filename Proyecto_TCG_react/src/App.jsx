@@ -28,8 +28,9 @@ export default function App() {
   const [carrito, setCarrito] = useState(cargarCarritoGuardado);
   const [mostrarCarrito, setMostrarCarrito] = useState(false);
   
-  // ¡AQUÍ ESTÁ LA LÍNEA QUE FALTABA!
-  const [isAuthenticated, setIsAuthenticated] = useState(false); 
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    () => localStorage.getItem('usuario_rol') === 'admin'
+  );
 
   useEffect(() => {
     localStorage.setItem(CLAVE_CARRITO, JSON.stringify(carrito));
@@ -63,6 +64,8 @@ export default function App() {
       <Encabezado
         cantidad={cantidadTotal}
         onVerCarrito={() => setMostrarCarrito(true)}
+        isAuthenticated={isAuthenticated}
+        onCerrarSesion={() => setIsAuthenticated(false)}
       />
 
       <main>

@@ -2,18 +2,7 @@ import React from 'react';
 import './Admin.css';
 const AdminPanel = () => {
   return (
-    <>
-      <header>
-        <h1>Bienvenido Admin!</h1>
-      </header>
-
-      <main>
-        <nav className="menu">
-          <a href="/pokemon_tcg"> INICIO </a>
-          <a href="/productos_tcg"> PRODUCTOS </a>
-          <a href="/contacto_tcg"> CONTACTO </a>
-        </nav>
-
+    <div className="admin-panel">
         <section id="Manejar_inventario">
           <form id="formProducto" className="mb-4">
             <h3>Agregar nuevo producto</h3>
@@ -83,8 +72,7 @@ const AdminPanel = () => {
           />
           <button type="button" className="btn btn-success">Actualizar producto</button>
         </section>
-      </main>
-    </>
+    </div>
   );
 };
 

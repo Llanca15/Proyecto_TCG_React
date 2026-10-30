@@ -1,10 +1,17 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 
-export default function Encabezado({ cantidad = 0, onVerCarrito }) {
+export default function Encabezado({
+  cantidad = 0,
+  onVerCarrito,
+  isAuthenticated = false,
+  onCerrarSesion,
+}) {
   const [usuarioActivo, setUsuarioActivo] = useState('');
+  const location = useLocation();
+  const estaEnPanelAdmin = location.pathname.toLowerCase() === '/admin';
 
   useEffect(() => {
     const verificarUsuario = () => {
@@ -19,7 +26,9 @@ export default function Encabezado({ cantidad = 0, onVerCarrito }) {
 
   const cerrarSesion = () => {
     localStorage.removeItem('usuario_activo');
+    localStorage.removeItem('usuario_rol');
     setUsuarioActivo('');
+    onCerrarSesion?.();
   };
 
   return (
@@ -48,7 +57,6 @@ export default function Encabezado({ cantidad = 0, onVerCarrito }) {
               <Nav.Link as={Link} to="/">INICIO</Nav.Link>
               <Nav.Link as={Link} to="/productos">PRODUCTOS</Nav.Link>
               <Nav.Link as={Link} to="/contacto">CONTACTO</Nav.Link>
-              <Nav.Link as={Link} to="/Admin">ADMIN</Nav.Link>
 
               {usuarioActivo ? (
                 <div className="user-info">
@@ -64,6 +72,15 @@ export default function Encabezado({ cantidad = 0, onVerCarrito }) {
                   >
                     Salir
                   </button>
+                  {isAuthenticated && (
+                    <Nav.Link
+                      as={Link}
+                      to={estaEnPanelAdmin ? '/' : '/admin'}
+                      className="d-inline-block"
+                    >
+                      {estaEnPanelAdmin ? 'SALIR DEL PANEL' : 'ENTRAR AL PANEL'}
+                    </Nav.Link>
+                  )}
                 </div>
               ) : (
                 <Nav.Link as={Link} to="/login">
