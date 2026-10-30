@@ -1,82 +1,68 @@
-import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import { describe, it, expect, vi } from 'vitest'
-import Carrito from '../components/Carrito' // Ajusta la ruta según dónde ubiques tu archivo de test
+import { describe, expect, it, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import Carrito from '../components/Carrito';
 
-describe('Componente <Carrito />', () => {
-  const itemsMock = [
-    { id: 1, nombre: 'ETB ACENDED HEROES', precio: 68000, cantidad: 2, icono: '📦' },
-    { id: {toString: () => '2'}, id: 2, nombre: 'Sobre pitch black', precio: 8000, cantidad: 1, icono: '🃏' }
-  ]
+const items = [
+  { id: 1, nombre: 'ETB ACENDED HEROES', precio: 68000, cantidad: 2, icono: '📦' },
+  { id: 2, nombre: 'Sobre pitch black', precio: 8000, cantidad: 1, icono: '🃏' },
+];
 
-  it('muestra mensaje de carrito vacío cuando no hay items', () => {
-    render(<Carrito mostrar={true} items={[]} onQuitar={() => {}} onCerrar={() => {}} onVaciar={() => {}} />)
+function renderCarrito(overrides = {}) {
+  const props = {
+    mostrar: true,
+    items,
+    onQuitar: vi.fn(),
+    onCerrar: vi.fn(),
+    onVaciar: vi.fn(),
+    ...overrides,
+  };
 
-    expect(screen.getByText(/Todavía no agregas productos./i)).toBeInTheDocument()
-  })
+  return { ...render(<Carrito {...props} />), props };
+}
 
-  it('renderiza los items, calcula el total correctamente y muestra el botón de vaciar', () => {
-    render(
-      <Carrito 
-        mostrar={true} 
-        items={itemsMock} 
-        onQuitar={() => {}} 
-        onCerrar={() => {}} 
-        onVaciar={() => {}} 
-      />
-    )
+describe('Componente Carrito', () => {
+  it('muestra el mensaje correspondiente cuando no hay productos', () => {
+    renderCarrito({ items: [] });
 
-    // Verificar que los productos aparecen en el DOM
-    expect(screen.getByText(/ETB ACENDED HEROES × 2/i)).toBeInTheDocument()
-    expect(screen.getByText(/Sobre pitch black × 1/i)).toBeInTheDocument()
+    expect(screen.getByText('Todavía no agregas productos.')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Vaciar carrito' })).not.toBeInTheDocument();
+  });
 
-    // Cálculo total esperado: (68000 * 2) + (8000 * 1) = 144000
-    // formatearPrecio usa 'es-CL' con CLP (ej: $ 144.000,00 o similar según entorno)
-    const totalTexto = screen.getByText(/Total:/i)
-    expect(totalTexto).toHaveTextContent(/144\.000/)
+  it('muestra los productos, el total y la opción para vaciar el carrito', () => {
+    renderCarrito();
 
-    // Verificar botones de acción
-    expect(screen.getByRole('button', { name: /Vaciar carrito/i })).toBeInTheDocument()
-  })
+    expect(screen.getByText(/ETB ACENDED HEROES × 2/)).toBeInTheDocument();
+    expect(screen.getByText(/Sobre pitch black × 1/)).toBeInTheDocument();
+    expect(screen.getByText(/Total:/)).toHaveTextContent(/144\.000/);
+    expect(screen.getByRole('button', { name: 'Vaciar carrito' })).toBeInTheDocument();
+  });
 
-  it('llama a la función onQuitar con el id correcto al hacer clic en "Quitar"', async () => {
-    const handleQuitar = vi.fn()
-    const user = userEvent.setup()
+  it('solicita quitar el producto seleccionado', async () => {
+    const user = userEvent.setup();
+    const { props } = renderCarrito();
 
-    render(
-      <Carrito 
-        mostrar={true} 
-        items={itemsMock} 
-        onQuitar={handleQuitar} 
-        onCerrar={() => {}} 
-        onVaciar={() => {}} 
-      />
-    )
+    await user.click(screen.getAllByRole('button', { name: 'Quitar' })[0]);
 
-    const botonesQuitar = screen.getAllByRole('button', { name: /Quitar/i })
-    await user.click(botonesQuitar[0])
+    expect(props.onQuitar).toHaveBeenCalledTimes(1);
+    expect(props.onQuitar).toHaveBeenCalledWith(items[0].id);
+  });
 
-    expect(handleQuitar).toHaveBeenCalledTimes(1)
-    expect(handleQuitar).toHaveBeenCalledWith(itemsMock[0].id)
-  })
+  it('solicita vaciar el carrito', async () => {
+    const user = userEvent.setup();
+    const { props } = renderCarrito();
 
-  it('llama a la función onVaciar al hacer clic en el botón "Vaciar carrito"', async () => {
-    const handleVaciar = vi.fn()
-    const user = userEvent.setup()
+    await user.click(screen.getByRole('button', { name: 'Vaciar carrito' }));
 
-    render(
-      <Carrito 
-        mostrar={true} 
-        items={itemsMock} 
-        onQuitar={() => {}} 
-        onCerrar={() => {}} 
-        onVaciar={handleVaciar} 
-      />
-    )
+    expect(props.onVaciar).toHaveBeenCalledTimes(1);
+  });
 
-    const botonVaciar = screen.getByRole('button', { name: /Vaciar carrito/i })
-    await user.click(botonVaciar)
+  it('solicita cerrar el carrito', async () => {
+    const user = userEvent.setup();
+    const { props } = renderCarrito();
 
-    expect(handleVaciar).toHaveBeenCalledTimes(1)
-  })
-})
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+
+    expect(props.onCerrar).toHaveBeenCalledTimes(1);
+  });
+});

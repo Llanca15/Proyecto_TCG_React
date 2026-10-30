@@ -41,6 +41,7 @@ describe('Panel de administración', () => {
     await user.type(screen.getByLabelText('URL de imagen'), '/caja.jpg');
     await user.click(screen.getByRole('button', { name: 'Agregar producto' }));
 
+    expect(props.onAgregarProducto).toHaveBeenCalledTimes(1);
     expect(props.onAgregarProducto).toHaveBeenCalledWith({
       nombre: 'Caja nueva',
       descripcion: 'Descripción nueva',
@@ -62,6 +63,7 @@ describe('Panel de administración', () => {
     await user.type(nombre, 'Sobre actualizado');
     await user.click(screen.getByRole('button', { name: 'Guardar cambios' }));
 
+    expect(props.onActualizarProducto).toHaveBeenCalledTimes(1);
     expect(props.onActualizarProducto).toHaveBeenCalledWith({
       ...producto,
       nombre: 'Sobre actualizado',
@@ -74,7 +76,24 @@ describe('Panel de administración', () => {
 
     await user.click(screen.getByRole('button', { name: 'Eliminar Sobre de prueba' }));
 
+    expect(props.onEliminarProducto).toHaveBeenCalledTimes(1);
     expect(props.onEliminarProducto).toHaveBeenCalledWith(producto.id);
+  });
+
+  it('muestra el inventario actual y el estado vacío', () => {
+    const { rerender, props } = renderAdmin();
+
+    expect(screen.getByRole('heading', { name: 'Inventario (1)' })).toBeInTheDocument();
+    expect(screen.getByText('Sobre de prueba')).toBeInTheDocument();
+
+    rerender(
+      <AdminPanel
+        {...props}
+        productos={[]}
+      />
+    );
+
+    expect(screen.getByText('No hay productos en el inventario.')).toBeInTheDocument();
   });
 
   it('reordena productos al arrastrar una fila sobre otra', () => {

@@ -1,77 +1,54 @@
-import { describe, it, expect, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import Buscador from '../components/Buscador' // Ajusta la ruta según donde tengas tu archivo
+import { describe, expect, it, vi } from 'vitest';
+import { fireEvent, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import Buscador from '../components/Buscador';
+
+const categorias = ['ETB', 'Sobre', 'Blister'];
+
+function renderBuscador(overrides = {}) {
+  const props = {
+    texto: '',
+    onCambiarTexto: vi.fn(),
+    categoria: 'Todas',
+    onCambiarCategoria: vi.fn(),
+    categorias,
+    ...overrides,
+  };
+
+  return { ...render(<Buscador {...props} />), props };
+}
 
 describe('Componente Buscador', () => {
-  const categoriasMock = ['ETB', 'Sobre', 'Blister']
+  it('muestra el texto actual y las categorías disponibles', () => {
+    renderBuscador({ texto: 'Charizard', categoria: 'ETB' });
 
-  it('renderiza el input de búsqueda y el selector con sus categorías', () => {
-    render(
-      <Buscador
-        texto=""
-        onCambiarTexto={() => {}}
-        categoria="Todas"
-        onCambiarCategoria={() => {}}
-        categorias={categoriasMock}
-      />
-    )
+    expect(screen.getByRole('searchbox')).toHaveValue('Charizard');
+    expect(screen.getByRole('combobox')).toHaveValue('ETB');
+    expect(screen.getByRole('option', { name: 'Todas las categorías' })).toBeInTheDocument();
 
-    // Verificar que el input de búsqueda está presente
-    const inputBusqueda = screen.getByPlaceholderText(/buscar coleccion por nombre.../i)
-    expect(inputBusqueda).toBeInTheDocument()
+    categorias.forEach((categoria) => {
+      expect(screen.getByRole('option', { name: categoria })).toBeInTheDocument();
+    });
+  });
 
-    // Verificar la opción por defecto del select
-    expect(screen.getByText('Todas las categorías')).toBeInTheDocument()
+  it('notifica el nuevo texto de búsqueda', () => {
+    const { props } = renderBuscador();
 
-    // Verificar que cada categoría de la lista se renderiza como opción
-    categoriasMock.forEach((cat) => {
-      expect(screen.getByRole('option', { name: cat })).toBeInTheDocument()
-    })
-  })
+    fireEvent.change(screen.getByRole('searchbox'), {
+      target: { value: 'Charizard' },
+    });
 
-  it('llama a onCambiarTexto cuando el usuario escribe en el buscador', async () => {
-    const handleCambiarTexto = vi.fn()
-    const user = userEvent.setup()
+    expect(props.onCambiarTexto).toHaveBeenCalledTimes(1);
+    expect(props.onCambiarTexto).toHaveBeenCalledWith('Charizard');
+  });
 
-    render(
-      <Buscador
-        texto=""
-        onCambiarTexto={handleCambiarTexto}
-        categoria="Todas"
-        onCambiarCategoria={() => {}}
-        categorias={categoriasMock}
-      />
-    )
+  it('notifica la categoría seleccionada', async () => {
+    const user = userEvent.setup();
+    const { props } = renderBuscador();
 
-    const inputBusqueda = screen.getByPlaceholderText(/buscar coleccion por nombre.../i)
-    
-    // Escribir en el input
-    await user.type(inputBusqueda, 'Charizard')
+    await user.selectOptions(screen.getByRole('combobox'), 'ETB');
 
-    // Comprueba que se haya llamado a la función por cada letra escrita
-    expect(handleCambiarTexto).toHaveBeenCalled()
-  })
-
-  it('llama a onCambiarCategoria cuando el usuario selecciona otra categoría', async () => {
-    const handleCambiarCategoria = vi.fn()
-    const user = userEvent.setup()
-
-    render(
-      <Buscador
-        texto=""
-        onCambiarTexto={() => {}}
-        categoria="Todas"
-        onCambiarCategoria={handleCambiarCategoria}
-        categorias={categoriasMock}
-      />
-    )
-
-    const selectCategoria = screen.getByRole('combobox')
-
-    // Cambiar la selección del select
-    await user.selectOptions(selectCategoria, 'ETB')
-
-    expect(handleCambiarCategoria).toHaveBeenCalledWith('ETB')
-  })
-})
+    expect(props.onCambiarCategoria).toHaveBeenCalledTimes(1);
+    expect(props.onCambiarCategoria).toHaveBeenCalledWith('ETB');
+  });
+});
