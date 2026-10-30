@@ -62,7 +62,7 @@ const productos = [
     descripcion: '1 mazo de 40 cartas listo para jugar (incluye 1 de 4 cartas promocionales holográficas exclusivas)',
     precio: 24990, 
     descuento: 20,
-    stock: 15,
+    stock: 15, 
     categoria: 'Battle box',
     imagen: './images/productos_varios/Caja_de_Combina_y_Combate_de_Rivales_Predestinados.webp'
   },
