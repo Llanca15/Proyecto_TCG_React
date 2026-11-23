@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route } from 'react-router'; // o 'react-router-dom'
+import { Routes, Route, useNavigate } from 'react-router';
 
-import productos from './data/productos.js';
+import { Alert, Button } from 'react-bootstrap';
 import Encabezado from './components/Encabezado';
 import Portada from './components/Portada';
 import PiePagina from './components/PiePagina';
@@ -12,9 +12,19 @@ import Login from './pages/Login';
 import Carrito from './components/Carrito';
 import AdminPanel from './pages/Admin'; 
 import ProtectedRoute from './pages/RutaAdmin.jsx'; 
+import Checkout from './pages/Checkout.jsx';
+import ResultadoPago from './pages/ResultadoPago.jsx';
+import {
+  actualizarProducto as actualizarProductoApi,
+  crearPedido,
+  crearProducto,
+  eliminarProducto as eliminarProductoApi,
+  listarProductos,
+  mensajeErrorApi,
+  reordenarProductos as reordenarProductosApi,
+} from './services/api.js';
 
 const CLAVE_CARRITO = 'carrito-loquieres';
-const CLAVE_PRODUCTOS = 'productos-tcg';
 
 function cargarCarritoGuardado() {
   try {
@@ -25,38 +35,43 @@ function cargarCarritoGuardado() {
   }
 }
 
-function cargarProductosGuardados() {
-  try {
-    const guardados = localStorage.getItem(CLAVE_PRODUCTOS);
-    if (!guardados) return productos;
-
-    const productosGuardados = JSON.parse(guardados);
-    if (Array.isArray(productosGuardados)) return productosGuardados;
-
-    console.error('El inventario guardado no tiene un formato válido.');
-    return productos;
-  } catch (error) {
-    console.error('No se pudo cargar el inventario guardado.', error);
-    return productos;
-  }
-}
-
 export default function App() {
+  const navigate = useNavigate();
   const [carrito, setCarrito] = useState(cargarCarritoGuardado);
   const [mostrarCarrito, setMostrarCarrito] = useState(false);
-  const [inventario, setInventario] = useState(cargarProductosGuardados);
-  
+  const [inventario, setInventario] = useState([]);
+  const [cargandoProductos, setCargandoProductos] = useState(true);
+  const [errorApi, setErrorApi] = useState('');
+  const [intentosCarga, setIntentosCarga] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(
     () => localStorage.getItem('usuario_rol') === 'admin'
   );
 
   useEffect(() => {
-    localStorage.setItem(CLAVE_CARRITO, JSON.stringify(carrito));
-  }, [carrito]);
+    let vigente = true;
+    listarProductos()
+      .then((productos) => {
+        if (!vigente) return;
+        setInventario(productos);
+        setErrorApi('');
+      })
+      .catch((error) => {
+        if (vigente) {
+          setErrorApi(mensajeErrorApi(error, 'No se pudo cargar el catálogo.'));
+        }
+      })
+      .finally(() => {
+        if (vigente) setCargandoProductos(false);
+      });
+
+    return () => {
+      vigente = false;
+    };
+  }, [intentosCarga]);
 
   useEffect(() => {
-    localStorage.setItem(CLAVE_PRODUCTOS, JSON.stringify(inventario));
-  }, [inventario]);
+    localStorage.setItem(CLAVE_CARRITO, JSON.stringify(carrito));
+  }, [carrito]);
 
   const cantidadTotal = carrito.reduce(
     (suma, item) => suma + item.cantidad,
@@ -81,32 +96,86 @@ export default function App() {
     setCarrito((actual) => actual.filter((item) => item.id !== id));
   }
 
-  function agregarProducto(producto) {
-    setInventario((actual) => {
-      const nuevoId = actual.reduce(
-        (idMayor, item) => Math.max(idMayor, Number(item.id) || 0),
-        0
-      ) + 1;
-      return [...actual, { ...producto, id: nuevoId }];
-    });
+  async function agregarProducto(producto) {
+    try {
+      const creado = await crearProducto(producto);
+      setInventario((actual) => [...actual, creado]);
+      setErrorApi('');
+      return creado;
+    } catch (error) {
+      setErrorApi(mensajeErrorApi(error, 'No se pudo crear el producto.'));
+      throw error;
+    }
   }
 
-  function actualizarProducto(productoActualizado) {
-    setInventario((actual) =>
-      actual.map((producto) =>
-        producto.id === productoActualizado.id
-          ? productoActualizado
-          : producto
-      )
-    );
+  async function actualizarProducto(productoActualizado) {
+    try {
+      const actualizado = await actualizarProductoApi(productoActualizado);
+      setInventario((actual) =>
+        actual.map((producto) =>
+          producto.id === actualizado.id ? actualizado : producto
+        )
+      );
+      setErrorApi('');
+      return actualizado;
+    } catch (error) {
+      setErrorApi(mensajeErrorApi(error, 'No se pudo actualizar el producto.'));
+      throw error;
+    }
   }
 
-  function eliminarProducto(id) {
-    setInventario((actual) => actual.filter((producto) => producto.id !== id));
+  async function eliminarProducto(id) {
+    try {
+      await eliminarProductoApi(id);
+      setInventario((actual) => actual.filter((producto) => producto.id !== id));
+      setErrorApi('');
+    } catch (error) {
+      setErrorApi(mensajeErrorApi(error, 'No se pudo eliminar el producto.'));
+      throw error;
+    }
   }
 
-  function reordenarProductos(productosReordenados) {
-    setInventario(productosReordenados);
+  async function reordenarProductos(productosReordenados) {
+    try {
+      const actualizados = await reordenarProductosApi(productosReordenados);
+      setInventario(actualizados);
+      setErrorApi('');
+      return actualizados;
+    } catch (error) {
+      setErrorApi(mensajeErrorApi(error, 'No se pudo guardar el orden.'));
+      throw error;
+    }
+  }
+
+  async function procesarPedido({ cliente, lineas }) {
+    try {
+      const pedido = await crearPedido({
+        nombre: cliente.nombre,
+        email: cliente.email,
+        direccion: cliente.direccion,
+        lineas,
+      });
+      setCarrito([]);
+      setErrorApi('');
+      listarProductos()
+        .then(setInventario)
+        .catch((error) => {
+          setErrorApi(mensajeErrorApi(
+            error,
+            'El pedido se confirmó, pero no se pudo actualizar el catálogo.'
+          ));
+        });
+      return pedido;
+    } catch (error) {
+      setErrorApi(mensajeErrorApi(error, 'No se pudo confirmar el pedido.'));
+      throw error;
+    }
+  }
+
+  function reintentarConexion() {
+    setErrorApi('');
+    setCargandoProductos(true);
+    setIntentosCarga((intento) => intento + 1);
   }
 
   return (
@@ -119,17 +188,49 @@ export default function App() {
       />
 
       <main>
+        {errorApi && (
+          <Alert variant="danger" role="alert">
+            {errorApi}
+            <Button
+              className="ms-2"
+              size="sm"
+              variant="outline-danger"
+              onClick={reintentarConexion}
+            >
+              Reintentar conexión
+            </Button>
+          </Alert>
+        )}
         <Routes>
           <Route path="/" element={<Portada />} />
           <Route
             path="/productos"
             element={
-              <Productos productos={inventario} onAgregar={agregarAlCarrito} />
+              cargandoProductos
+                ? <p role="status">Cargando catálogo…</p>
+                : <Productos productos={inventario} onAgregar={agregarAlCarrito} />
             }
           />
           <Route path="/contacto" element={<Contacto />} />
           
           <Route path="/liga-pokemon" element={<LigaPokemon />} />
+          <Route
+            path="/checkout"
+            element={
+              <Checkout
+                items={carrito}
+                onProcesarPago={procesarPedido}
+              />
+            }
+          />
+          <Route
+            path="/pago-exitoso"
+            element={<ResultadoPago exitoso />}
+          />
+          <Route
+            path="/pago-fallido"
+            element={<ResultadoPago />}
+          />
           
           <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
 
@@ -156,6 +257,10 @@ export default function App() {
         items={carrito}
         onQuitar={quitarDelCarrito}
         onVaciar={() => setCarrito([])}
+        onCheckout={() => {
+          setMostrarCarrito(false);
+          navigate('/checkout');
+        }}
       />
 
       <PiePagina />

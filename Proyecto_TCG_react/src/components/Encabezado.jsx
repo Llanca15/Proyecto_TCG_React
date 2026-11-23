@@ -39,7 +39,7 @@ export default function Encabezado({
           
         <Navbar.Brand as={Link} to="/" className="m-0 p-0">
           <img
-            src="/images/logos/Pokémon_Trading_Card_Game_logo_logo.svg.webp"
+            src="/images/logos/Pok%C3%A9mon_Trading_Card_Game_logo_logo.svg.webp"
             alt="Logo de Pokémon"
             className="logo-header"
           />

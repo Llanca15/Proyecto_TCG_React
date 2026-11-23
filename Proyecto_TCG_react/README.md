@@ -1,5 +1,20 @@
 # React + Vite
 
+## Tienda Pokémon TCG
+
+El carrito permite completar un checkout con datos de contacto y dirección. El pago es
+solo una demostración: no se solicitan datos de tarjeta ni se procesa dinero real.
+En el checkout se puede simular un pago aprobado o rechazado; si se rechaza, el carrito
+se conserva para reintentar.
+
+Ejecuta `npm run test:cobertura` para correr las pruebas y generar el informe HTML en
+`coverage/`. La cobertura incluye todos los archivos JavaScript y JSX de `src` y exige
+un mínimo de 80 % en líneas, funciones, ramas y sentencias.
+
+El catálogo, la administración y la creación de pedidos usan Axios para conectarse con
+el backend Spring Boot en `http://localhost:8080/api`. Inicia el backend desde el
+proyecto `demo` antes de ejecutar el frontend; consulta la [guía del backend](../../../../demo/README.md).
+
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
 Currently, two official plugins are available:

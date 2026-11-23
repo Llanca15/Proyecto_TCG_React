@@ -1,24 +1,6 @@
-import { Link } from 'react-router';
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router';
 import './Liga_pokemon.css';
 
 export default function LigaPokemon() {
-  const navigate = useNavigate();
-  const [usuarioActivo, setUsuarioActivo] = useState(
-    () => localStorage.getItem('usuario_activo')
-  );
-
-  useEffect(() => {
-    setUsuarioActivo(localStorage.getItem('usuario_activo'));
-  }, []);
-
-  function cerrarSesion() {
-    localStorage.removeItem('usuario_activo');
-    setUsuarioActivo(null);
-    window.location.reload();
-  }
-
   return (
     <main className="liga-pokemon">
       <form

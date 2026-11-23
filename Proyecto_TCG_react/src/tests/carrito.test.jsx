@@ -15,6 +15,7 @@ function renderCarrito(overrides = {}) {
     onQuitar: vi.fn(),
     onCerrar: vi.fn(),
     onVaciar: vi.fn(),
+    onCheckout: vi.fn(),
     ...overrides,
   };
 
@@ -55,6 +56,15 @@ describe('Componente Carrito', () => {
     await user.click(screen.getByRole('button', { name: 'Vaciar carrito' }));
 
     expect(props.onVaciar).toHaveBeenCalledTimes(1);
+  });
+
+  it('solicita continuar al checkout', async () => {
+    const user = userEvent.setup();
+    const { props } = renderCarrito();
+
+    await user.click(screen.getByRole('button', { name: 'Continuar al pago' }));
+
+    expect(props.onCheckout).toHaveBeenCalledTimes(1);
   });
 
   it('solicita cerrar el carrito', async () => {

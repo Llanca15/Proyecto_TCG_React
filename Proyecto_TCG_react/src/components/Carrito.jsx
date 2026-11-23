@@ -1,7 +1,7 @@
 import { Offcanvas, ListGroup, Button } from 'react-bootstrap'
 import { formatearPrecio } from '../data/productos.js'
 //delegacion de funciones
-function Carrito({ mostrar,  items, onQuitar, onCerrar,onVaciar }) {
+function Carrito({ mostrar, items, onQuitar, onCerrar, onVaciar, onCheckout }) {
   // Dato derivado: se calcula en cada render, NO se guarda en el estado.
   const total = items.reduce((suma, item) => suma + item.precio * item.cantidad, 0)
 
@@ -36,6 +36,13 @@ function Carrito({ mostrar,  items, onQuitar, onCerrar,onVaciar }) {
             </p>
             <Button variant="outline-secondary" onClick={onVaciar}>
               Vaciar carrito
+            </Button>
+            <Button
+              className="w-100 mt-3"
+              variant="primary"
+              onClick={onCheckout}
+            >
+              Continuar al pago
             </Button>
           </>
         )}

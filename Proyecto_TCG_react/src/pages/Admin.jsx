@@ -31,7 +31,7 @@ const AdminPanel = ({
     setFormulario((actual) => ({ ...actual, [name]: value }));
   }
 
-  function guardarProducto(event) {
+  async function guardarProducto(event) {
     event.preventDefault();
     const producto = {
       nombre: formulario.nombre.trim(),
@@ -43,15 +43,22 @@ const AdminPanel = ({
       imagen: formulario.imagen.trim(),
     };
 
-    if (productoEditando === null) {
-      onAgregarProducto(producto);
-      setMensaje('Producto agregado correctamente.');
-    } else {
-      onActualizarProducto({ ...producto, id: productoEditando });
-      setMensaje('Producto actualizado correctamente.');
+    try {
+      if (productoEditando === null) {
+        await onAgregarProducto(producto);
+        setMensaje('Producto agregado correctamente.');
+      } else {
+        await onActualizarProducto({ ...producto, id: productoEditando });
+        setMensaje('Producto actualizado correctamente.');
+      }
+      cancelarEdicion();
+    } catch {
+      setMensaje(
+        productoEditando === null
+          ? 'No se pudo agregar el producto.'
+          : 'No se pudo actualizar el producto.'
+      );
     }
-
-    cancelarEdicion();
   }
 
   function editarProducto(producto) {
@@ -77,13 +84,17 @@ const AdminPanel = ({
     setFormulario(formularioVacio);
   }
 
-  function eliminar(producto) {
-    onEliminarProducto(producto.id);
-    if (productoEditando === producto.id) cancelarEdicion();
-    setMensaje(`Se eliminó "${producto.nombre}".`);
+  async function eliminar(producto) {
+    try {
+      await onEliminarProducto(producto.id);
+      if (productoEditando === producto.id) cancelarEdicion();
+      setMensaje(`Se eliminó "${producto.nombre}".`);
+    } catch {
+      setMensaje(`No se pudo eliminar "${producto.nombre}".`);
+    }
   }
 
-  function soltarProducto(event, productoDestino) {
+  async function soltarProducto(event, productoDestino) {
     event.preventDefault();
     if (productoArrastrado === null || productoArrastrado === productoDestino.id) {
       return;
@@ -100,9 +111,13 @@ const AdminPanel = ({
     const productosReordenados = [...productos];
     const [productoMovido] = productosReordenados.splice(indiceOrigen, 1);
     productosReordenados.splice(indiceDestino, 0, productoMovido);
-    onReordenarProductos(productosReordenados);
-    setMensajeOrden(`"${productoMovido.nombre}" ahora está en la posición ${indiceDestino + 1}.`);
-    setProductoArrastrado(null);
+    try {
+      await onReordenarProductos(productosReordenados);
+      setMensajeOrden(`"${productoMovido.nombre}" ahora está en la posición ${indiceDestino + 1}.`);
+      setProductoArrastrado(null);
+    } catch {
+      setMensajeOrden('No se pudo guardar el nuevo orden.');
+    }
   }
 
   return (
