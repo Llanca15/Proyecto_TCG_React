@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080/api',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1',
   timeout: 10000,
   headers: { 'Content-Type': 'application/json' },
 });
@@ -18,6 +18,11 @@ export function mensajeErrorApi(error, mensajePredeterminado) {
 
 export async function listarProductos() {
   const { data } = await api.get('/productos');
+  return data;
+}
+
+export async function buscarProducto(id) {
+  const { data } = await api.get(`/productos/${id}`);
   return data;
 }
 
@@ -47,4 +52,23 @@ export async function reordenarProductos(productos) {
 export async function crearPedido(pedido) {
   const { data } = await api.post('/pedidos', pedido);
   return data;
+}
+
+export async function listarPedidos() {
+  const { data } = await api.get('/pedidos');
+  return data;
+}
+
+export async function buscarPedido(id) {
+  const { data } = await api.get(`/pedidos/${id}`);
+  return data;
+}
+
+export async function actualizarPedido(id, pedido) {
+  const { data } = await api.put(`/pedidos/${id}`, pedido);
+  return data;
+}
+
+export async function eliminarPedido(id) {
+  await api.delete(`/pedidos/${id}`);
 }

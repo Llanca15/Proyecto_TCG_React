@@ -24,10 +24,15 @@ vi.mock('axios', () => ({
 }));
 
 import {
+  actualizarPedido,
   actualizarProducto,
+  buscarPedido,
+  buscarProducto,
   crearPedido,
   crearProducto,
+  eliminarPedido,
   eliminarProducto,
+  listarPedidos,
   listarProductos,
   mensajeErrorApi,
   reordenarProductos,
@@ -45,7 +50,7 @@ describe('servicio Axios', () => {
     await expect(listarProductos()).resolves.toEqual(respuesta);
     expect(axiosMocks.config).toEqual(
       expect.objectContaining({
-        baseURL: expect.stringMatching(/\/api$/),
+        baseURL: expect.stringMatching(/\/api\/v1$/),
         timeout: 10000,
       })
     );
@@ -82,6 +87,23 @@ describe('servicio Axios', () => {
       nombre: 'Ada',
       lineas: [],
     });
+  });
+
+  it('expone operaciones CRUD para productos y pedidos', async () => {
+    axiosMocks.client.get.mockResolvedValue({ data: [] });
+    axiosMocks.client.put.mockResolvedValue({ data: { id: 8 } });
+
+    await buscarProducto(2);
+    await listarPedidos();
+    await buscarPedido(8);
+    await actualizarPedido(8, { nombre: 'Ada' });
+    await eliminarPedido(8);
+
+    expect(axiosMocks.client.get).toHaveBeenNthCalledWith(1, '/productos/2');
+    expect(axiosMocks.client.get).toHaveBeenNthCalledWith(2, '/pedidos');
+    expect(axiosMocks.client.get).toHaveBeenNthCalledWith(3, '/pedidos/8');
+    expect(axiosMocks.client.put).toHaveBeenCalledWith('/pedidos/8', { nombre: 'Ada' });
+    expect(axiosMocks.client.delete).toHaveBeenCalledWith('/pedidos/8');
   });
 
   it('presenta errores HTTP, desconexiones y un mensaje alternativo', () => {

@@ -12,7 +12,7 @@ Ejecuta `npm run test:cobertura` para correr las pruebas y generar el informe HT
 un mínimo de 80 % en líneas, funciones, ramas y sentencias.
 
 El catálogo, la administración y la creación de pedidos usan Axios para conectarse con
-el backend Spring Boot en `http://localhost:8080/api`. Inicia el backend desde el
+el backend Spring Boot en `http://localhost:8080/api/v1`. Inicia el backend desde el
 proyecto `demo` antes de ejecutar el frontend; consulta la [guía del backend](../../../../demo/README.md).
 
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
